@@ -1,0 +1,63 @@
+{% extends 'news/base.html' %}
+
+{% block title %}{{ article.title }} - NewsHub{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="custom-card">
+            <div class="card-body">
+                <h1 class="display-5 mb-4">{{ article.title }}</h1>
+                
+                <div class="article-meta mb-4 pb-3 border-bottom">
+                    <span class="me-4">
+                        <i class="bi bi-person-circle"></i> <strong>By:</strong> {{ article.get_source }}
+                    </span>
+                    <span class="me-4">
+                        <i class="bi bi-calendar3"></i> {{ article.created_at|date:"F d, Y H:i" }}
+                    </span>
+                    {% if article.approved %}
+                        <span class="badge bg-success badge-custom">
+                            <i class="bi bi-check-circle-fill"></i> Approved
+                        </span>
+                        {% if article.approved_by %}
+                            <br>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="bi bi-person-check"></i> Approved by {{ article.approved_by.username }} on {{ article.approved_at|date:"F d, Y H:i" }}
+                            </small>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-warning badge-custom">
+                            <i class="bi bi-clock-history"></i> Pending Approval
+                        </span>
+                    {% endif %}
+                </div>
+                
+                <div class="article-content" style="font-size: 1.1rem; line-height: 1.9; white-space: pre-line;">
+                    {{ article.content }}
+                </div>
+                
+                {% if can_approve %}
+                    <hr class="my-5">
+                    <div class="text-center">
+                        <h4 class="mb-4">Article Approval</h4>
+                        <a href="{% url 'approve_article' article.id %}" class="btn btn-success btn-lg btn-custom me-3">
+                            <i class="bi bi-check-circle-fill"></i> Approve Article
+                        </a>
+                        <a href="{% url 'reject_article' article.id %}" class="btn btn-danger-custom btn-lg btn-custom" 
+                           onclick="return confirm('Are you sure you want to reject this article?');">
+                            <i class="bi bi-x-circle-fill"></i> Reject Article
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-5 pt-4 border-top">
+                    <a href="{% url 'article_list' %}" class="btn btn-outline-secondary btn-custom">
+                        <i class="bi bi-arrow-left"></i> Back to Articles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Dispatch</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-burgundy: #8B2635;
+            --deep-red: #A0302E;
+            --warm-orange: #D97642;
+            --cream: #F5F1E8;
+            --dark-brown: #3E2723;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-burgundy) 0%, var(--deep-red) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .register-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, var(--primary-burgundy) 0%, var(--deep-red) 100());
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .register-header i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-register {
+            padding: 12px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--deep-red) 0%, var(--warm-orange) 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(217, 118, 66, 0.4);
+        }
+        
+        .back-link {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #f0f0f0;
+            text-decoration: underline;
+        }
+        
+        .role-info {
+            background: #f8f9fa;
+            border-left: 4px solid var(--warm-orange);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .role-info h6 {
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+        }
+        
+        .role-info ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Back to Home Link -->
+        <div class="text-center mb-3">
+            <a href="{% url 'landing' %}" class="back-link">
+                <i class="bi bi-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
+        
+        <!-- Register Card -->
+        <div class="card register-card border-0">
+            <div class="register-header">
+                <i class="bi bi-person-plus-fill"></i>
+                <h2 class="mb-0">Create Your Account</h2>
+                <p class="mb-0 opacity-75">Join the Dispatch community</p>
+            </div>
+            
+            <div class="card-body p-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-person me-1"></i>First Name
+                            </label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger small">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-person me-1"></i>Last Name
+                            </label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger small">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-person-badge me-1"></i>Username *
+                        </label>
+                        {{ form.username }}
+                        {% if form.username.help_text %}
+                            <div class="form-text">{{ form.username.help_text }}</div>
+                        {% endif %}
+                        {% if form.username.errors %}
+                            <div class="text-danger small">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-envelope me-1"></i>Email Address *
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.help_text %}
+                            <div class="form-text">{{ form.email.help_text }}</div>
+                        {% endif %}
+                        {% if form.email.errors %}
+                            <div class="text-danger small">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-lock me-1"></i>Password *
+                        </label>
+                        {{ form.password }}
+                        {% if form.password.help_text %}
+                            <div class="form-text">{{ form.password.help_text }}</div>
+                        {% endif %}
+                        {% if form.password.errors %}
+                            <div class="text-danger small">{{ form.password.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.password_confirm.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-lock-fill me-1"></i>Confirm Password *
+                        </label>
+                        {{ form.password_confirm }}
+                        {% if form.password_confirm.errors %}
+                            <div class="text-danger small">{{ form.password_confirm.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.role.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-briefcase me-1"></i>Account Type *
+                        </label>
+                        {{ form.role }}
+                        {% if form.role.help_text %}
+                            <div class="form-text">{{ form.role.help_text }}</div>
+                        {% endif %}
+                        {% if form.role.errors %}
+                            <div class="text-danger small">{{ form.role.errors }}</div>
+                        {% endif %}
+                        
+                        <div class="role-info mt-2">
+                            <h6><i class="bi bi-info-circle me-1"></i>Role Information:</h6>
+                            <ul class="small mb-0">
+                                <li><strong>Reader:</strong> View and subscribe to articles and newsletters</li>
+                                <li><strong>Journalist:</strong> Create, edit, and publish your own articles</li>
+                                <li><strong>Editor:</strong> Review, approve, and manage all content</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-register">
+                            <i class="bi bi-person-plus me-2"></i>Create Account
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            Already have an account? 
+                            <a href="{% url 'login' %}" class="text-decoration-none">Login here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
