@@ -1,0 +1,102 @@
+{% extends 'news/base.html' %}
+
+{% block title %}Browse Subscriptions - NewsHub{% endblock %}
+
+{% block content %}
+<div class="page-header text-center">
+    <h1><i class="bi bi-bookmark-star"></i> Browse Subscriptions</h1>
+    <p class="lead">Subscribe to publishers and journalists to get updates on their content</p>
+</div>
+
+<div class="row">
+    <!-- Publishers Section -->
+    <div class="col-lg-6 mb-4">
+        <div class="custom-card">
+            <div class="card-body">
+                <h3 class="mb-4"><i class="bi bi-building"></i> Publishers</h3>
+                
+                {% if publishers %}
+                    <div class="list-group list-group-flush">
+                        {% for publisher in publishers %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
+                                <div>
+                                    <h5 class="mb-1">{{ publisher.name }}</h5>
+                                    {% if publisher.description %}
+                                        <p class="mb-0 text-muted small">{{ publisher.description|truncatewords:15 }}</p>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if publisher in subscribed_publishers %}
+                                        <a href="{% url 'toggle_publisher_subscription' publisher.id %}" 
+                                           class="btn btn-sm btn-outline-secondary btn-custom">
+                                            <i class="bi bi-check-circle-fill"></i> Subscribed
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'toggle_publisher_subscription' publisher.id %}" 
+                                           class="btn btn-sm btn-primary-custom btn-custom">
+                                            <i class="bi bi-plus-circle"></i> Subscribe
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info alert-custom">
+                        <i class="bi bi-info-circle"></i> No publishers available yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Journalists Section -->
+    <div class="col-lg-6 mb-4">
+        <div class="custom-card">
+            <div class="card-body">
+                <h3 class="mb-4"><i class="bi bi-people"></i> Journalists</h3>
+                
+                {% if journalists %}
+                    <div class="list-group list-group-flush">
+                        {% for journalist in journalists %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-3">
+                                <div>
+                                    <h5 class="mb-1">{{ journalist.get_full_name|default:journalist.username }}</h5>
+                                    <p class="mb-0 text-muted small">
+                                        <i class="bi bi-envelope"></i> {{ journalist.email }}
+                                    </p>
+                                </div>
+                                <div>
+                                    {% if journalist in subscribed_journalists %}
+                                        <a href="{% url 'toggle_journalist_subscription' journalist.id %}" 
+                                           class="btn btn-sm btn-outline-secondary btn-custom">
+                                            <i class="bi bi-check-circle-fill"></i> Subscribed
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'toggle_journalist_subscription' journalist.id %}" 
+                                           class="btn btn-sm btn-primary-custom btn-custom">
+                                            <i class="bi bi-plus-circle"></i> Subscribe
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info alert-custom">
+                        <i class="bi bi-info-circle"></i> No journalists available yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary btn-custom">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

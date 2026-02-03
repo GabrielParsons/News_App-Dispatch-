@@ -1,0 +1,62 @@
+{% extends 'news/base.html' %}
+
+{% block title %}{{ title }} - NewsHub{% endblock %}
+
+{% block content %}
+<div class="page-header text-center">
+    <h1>{{ title }}</h1>
+    <p class="lead">{{ user_role }}</p>
+</div>
+
+<div class="row">
+    {% if articles %}
+        {% for article in articles %}
+            <div class="col-lg-6 mb-4">
+                <div class="custom-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="card-title mb-3">
+                            <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+                        </h3>
+                        
+                        <div class="article-meta mb-3">
+                            <span class="me-3">
+                                <i class="bi bi-person"></i> {{ article.get_source }}
+                            </span>
+                            <span>
+                                <i class="bi bi-calendar"></i> {{ article.created_at|date:"F d, Y" }}
+                            </span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {% if article.approved %}
+                                <span class="badge bg-success badge-custom">
+                                    <i class="bi bi-check-circle"></i> Approved
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning badge-custom">
+                                    <i class="bi bi-clock"></i> Pending Approval
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="card-text flex-grow-1">{{ article.content|truncatewords:30 }}</p>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'article_detail' article.id %}" class="btn btn-primary-custom btn-custom">
+                                Read More <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="custom-card text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+                <p class="mt-3 text-muted">No articles available at this time.</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
